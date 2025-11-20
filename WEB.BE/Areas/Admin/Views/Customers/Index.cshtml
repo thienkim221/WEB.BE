@@ -1,0 +1,36 @@
+﻿@model IEnumerable<WEB.BE.Models.Customer>
+
+@{
+    ViewBag.Title = "Quản lý khách hàng";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 class="bg-danger text-white">DANH SÁCH KHÁCH HÀNG</h2>
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Mã KH</th>
+            <th>Tên khách hàng</th>
+            <th>SĐT</th>
+            <th>Email</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.CustomerID</td>
+                <td>@item.CustomerName</td>
+                <td>@item.CustomerPhone</td>
+                <td>@item.CustomerEmail</td>
+                <td>
+                    @Html.ActionLink("Xem", "Details", new { id = item.CustomerID },
+                        new { @class = "btn btn-info btn-sm" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

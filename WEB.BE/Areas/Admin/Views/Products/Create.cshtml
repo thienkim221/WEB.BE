@@ -1,0 +1,42 @@
+﻿@model WEB.BE.Models.Product
+
+<div class="form-group">
+    @Html.LabelFor(m => m.ProductName, new { @class = "control-label" })
+    @Html.TextBoxFor(m => m.ProductName, new { @class = "form-control" })
+    @Html.ValidationMessageFor(m => m.ProductName, "", new { @class = "text-danger" })
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(m => m.ProductDecription, new { @class = "control-label" })
+    @Html.TextAreaFor(m => m.ProductDecription, new { @class = "form-control" })
+    @Html.ValidationMessageFor(m => m.ProductDecription, "", new { @class = "text-danger" })
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(m => m.ProductPrice, new { @class = "control-label" })
+    @Html.TextBoxFor(m => m.ProductPrice, new { @class = "form-control", type = "number", step = "1000" })
+    @Html.ValidationMessageFor(m => m.ProductPrice, "", new { @class = "text-danger" })
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(m => m.Quantity, new { @class = "control-label" })
+    @Html.TextBoxFor(m => m.Quantity, new { @class = "form-control", type = "number" })
+    @Html.ValidationMessageFor(m => m.Quantity, "", new { @class = "text-danger" })
+</div>
+
+<div class="form-group">
+    @Html.Label("Danh mục", new { @class = "control-label" })
+    @Html.DropDownList("CategoryID", null, "-- Chọn danh mục --", new { @class = "form-control" })
+</div>
+
+<div class="form-group">
+    @Html.Label("Ảnh sản phẩm", new { @class = "control-label" })
+    <input type="file" name="ImageFile" class="form-control" />
+</div>
+
+<br />
+
+<div class="form-group">
+    <button type="submit" class="btn btn-success">Lưu</button>
+    <a href="@Url.Action("Index", "Products")" class="btn btn-secondary">Hủy</a>
+</div>

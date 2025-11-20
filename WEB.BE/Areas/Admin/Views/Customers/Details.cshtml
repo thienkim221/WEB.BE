@@ -1,0 +1,45 @@
+﻿@model WEB.BE.Models.Customer
+
+@{
+    ViewBag.Title = "Thông tin khách hàng";
+    Layout = "~/Areas/Admin/Views/Shared/AdminLayout.cshtml";
+}
+
+<h2 class="text-primary">THÔNG TIN KHÁCH HÀNG</h2>
+
+<div class="card p-3 mb-4">
+    <p><strong>Mã KH:</strong> @Model.CustomerID</p>
+    <p><strong>Tên KH:</strong> @Model.CustomerName</p>
+    <p><strong>Điện thoại:</strong> @Model.CustomerPhone</p>
+    <p><strong>Email:</strong> @Model.CustomerEmail</p>
+    <p><strong>Địa chỉ:</strong> @Model.CustomerAddress</p>
+</div>
+
+<h3 class="text-success">Danh sách đơn hàng</h3>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Mã đơn</th>
+            <th>Ngày đặt</th>
+            <th>Tổng tiền</th>
+            <th>Trạng thái</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var order in ViewBag.Orders)
+        {
+            <tr>
+                <td>@order.OrderID</td>
+                <td>@order.OrderDate.ToString("dd/MM/yyyy")</td>
+                <td>@String.Format("{0:N0} đ", order.TotalAmount)</td>
+                <td>@order.PaymentStatus</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<p>
+    <a href="@Url.Action("Index")" class="btn btn-secondary">Quay lại danh sách</a>
+</p>
