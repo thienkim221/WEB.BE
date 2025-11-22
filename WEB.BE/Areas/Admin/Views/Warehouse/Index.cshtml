@@ -1,0 +1,16 @@
+﻿@model List<WEB.BE.Models.Product>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 class="bg-danger text-white">QUẢN LÝ KHO HÀNG</h2>
+
+<h3 class="mt-3">Danh sách hàng tồn</h3>
+@Html.Partial("PVStockAvailable", Model.Where(p => p.Quantity > 0).ToList())
+
+<hr />
+
+<h3 class="mt-3 text-danger">Danh sách hàng cần nhập</h3>
+@Html.Partial("PVStockEmpty", Model.Where(p => p.Quantity == 0).ToList())

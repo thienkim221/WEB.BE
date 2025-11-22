@@ -1,0 +1,36 @@
+﻿
+@model IEnumerable<WEB.BE.Models.User>
+@{
+    ViewBag.Title = "Quản lý người dùng";
+    Layout = "~/Areas/Admin/Views/Shared/AdminLayout.cshtml";
+}
+
+<h2 class="text-success">QUẢN LÝ NGƯỜI QUẢN TRỊ</h2>
+
+<p>
+    @Html.ActionLink("Thêm tài khoản", "Create", null, new { @class = "btn btn-success" })
+</p>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Tên đăng nhập</th>
+            <th>Vai trò</th>
+            <th style="width:150px;">Chức năng</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Username</td>
+                <td>@item.Role</td>
+                <td>
+                    @Html.ActionLink("Sửa", "Edit", new { id = item.UserID }, new { @class = "btn btn-warning btn-sm" })
+                    @Html.ActionLink("Xóa", "Delete", new { id = item.UserID }, new { @class = "btn btn-danger btn-sm" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

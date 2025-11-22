@@ -1,0 +1,23 @@
+﻿@model WEB.BE.Models.Product
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Areas/Admin/Views/Shared/AdminLayout.cshtml";
+}
+
+<h2>@Model.ProductName</h2>
+
+<div class="row">
+    <div class="col-md-4">
+        <img src="~/Content/ProductImages/@Model.ProductImage " class="img-fluid" />
+    </div>
+
+    <div class="col-md-8">
+        <h4>Giá: @Model.ProductPrice.ToString("N0") đ</h4>
+        <p><b>Mô tả:</b> @Model.ProductDecription </p>
+        <p><b>Số lượng tồn:</b> @Model.Quantity</p>
+        <p><b>Danh mục:</b> @Model.Category.CategoryName</p>
+
+        <!-- KHÔNG có nút MUA HÀNG trong Admin -->
+    </div>
+</div>

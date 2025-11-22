@@ -1,0 +1,63 @@
+﻿@model WEB.BE.Models.Product
+
+<div class="form-group">
+    @Html.LabelFor(m => m.ProductName, new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.TextBoxFor(m => m.ProductName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.ProductName, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(m => m.ProductDecription, "Mô tả", new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.TextAreaFor(m => m.ProductDecription, new { @class = "form-control", rows = "4" })
+        @Html.ValidationMessageFor(m => m.ProductDecription, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(m => m.ProductPrice, "Giá sản phẩm", new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.TextBoxFor(m => m.ProductPrice, new { @class = "form-control", type = "number", step = "0.01" })
+        @Html.ValidationMessageFor(m => m.ProductPrice, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(m => m.Quantity, "Số lượng tồn kho", new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.TextBoxFor(m => m.Quantity, new { @class = "form-control", type = "number" })
+        @Html.ValidationMessageFor(m => m.Quantity, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.Label("Danh mục", new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.DropDownList("CategoryID", null, "-- Chọn danh mục --", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.CategoryID, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.Label("Ảnh sản phẩm", new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        <input type="file" name="ImageFile" class="form-control" />
+
+        @if (!string.IsNullOrEmpty(Model.ProductImage))
+        {
+            <p class="mt-2">Ảnh hiện tại:</p>
+            <img src="~/Images/Products/@Model.ProductImage"
+                 width="120" style="border:1px solid #ccc; padding:5px;" />
+        }
+    </div>
+</div>
+
+<br />
+<div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+        <button type="submit" class="btn btn-success">Lưu</button>
+        @Html.ActionLink("Quay lại", "Index", null, new { @class = "btn btn-default ml-2" })
+    </div>
+</div>

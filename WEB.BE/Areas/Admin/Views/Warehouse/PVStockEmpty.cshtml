@@ -1,0 +1,25 @@
+﻿@model IEnumerable<WEB.BE.Models.Product>
+
+<table class="table table-bordered table-striped">
+    <thead class="bg-danger text-white">
+        <tr>
+            <th>Tên sản phẩm</th>
+            <th>Số lượng</th>
+            <th>Giá</th>
+            <th>Chủng loại</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="table-warning">
+                <td>@item.ProductName</td>
+                <td>0</td>
+                <td>@String.Format("{0:N0} đ", item.ProductPrice)</td>
+                <td>@item.Category.CategoryName</td>
+            </tr>
+        }
+    </tbody>
+</table>
+

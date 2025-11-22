@@ -1,0 +1,73 @@
+﻿@model WEB.BE.Models.ViewModels.ProductSearchVM
+@using PagedList.Mvc
+
+<head>
+    <style>
+        img {
+            height: 100px;
+            max-width: 150px;
+        }
+    </style>
+</head>
+
+<!-- Hiển thị danh sách sản phẩm -->
+@if (Model.Products != null && Model.Products.Any())
+{
+
+    <h2 class="bg-success">DANH SÁCH SẢN PHẨM</h2>
+
+    <table class="table bg-info container-fluid">
+        <thead>
+
+            <tr>
+                <th class="bg-success col-md-3"> Ảnh </th>
+                <th class="bg-success col-md-2">Tên Sản Phẩm  </th>
+                <th class="bg-success col-md-1"> Dơn giá</th>
+                <th class="bg-success col-md-2"> Số lượng tồn </th>
+                <th class="bg-success col-md-3"> Chủng Loại  </th>
+                <th class="bg-success"></th> @* Nút Edit/Delete *@
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var product in Model.Products)
+            {
+                <tr>
+                    <td> @Html.DisplayFor(modelItem => product.ProductName)</td>
+                    <td> <img scr="@Html.DisplayFor(modelItem => product.ProductImage)" /></td>
+                    <td> @Html.DisplayFor(modelItem => product.ProductPrice)</td>
+                    <td> @Html.DisplayFor(modelItem => product.Category.CategoryName)</td>
+                    <td>
+                        @Html.ActionLink("Sửa", "Edit", new { id = product.ProductID }, new { @class = "btn btn-primary btn-sm" })
+                        @Html.ActionLink("Chi tiết", "Details", new { id = product.ProductID }, new { @class = "btn btn-primary btn-sm" })
+                        @Html.ActionLink("Xoá", "Delete", new { id = product.ProductID }, new { @class = "btn btn-primary btn-sm" })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <!-- Hiển thị phân trang -->
+    <div class="pagination-container">
+        @Html.PagedListPager(Model.Products, page => Url.Action("Index", new
+        {
+            page,
+            searchTerm = Model.SearchTerm,
+        minPrice = Model.MinPrice,
+            maxPrice = Model.MaxPrice,
+            sortOrder = Model.SortOrder
+        }))
+    </div>
+}
+
+else
+{
+    <p> Không tìm được sản phẩm nào phù hợp</p>
+}
+
+<div class="form-group">
+    <div class="col-md-offset-8 col-md-4">
+        @Html.ActionLink("Thêm mới", "Create", null, new { @class = "btn btn-primary" })
+    </div>
+</div>
+
