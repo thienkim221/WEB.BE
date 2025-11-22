@@ -1,0 +1,33 @@
+﻿@model IEnumerable<WEB.BE.Models.Product>
+
+@* Dùng để hiển thị danh sách sản phẩm dưới dạng slider *@
+@if (Model != null && Model.Any())
+{
+    <h4 class="mt-4 text-danger">SẢN PHẨM NỔI BẬT</h4>
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-3 mb-4">
+                <div class="card h-100 shadow-sm">
+                    @* Logic hiển thị ảnh (giả định đã được xử lý trong View này) *@
+                    @{
+                        string imagePath = item.ProductImage;
+                        if (!imagePath.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+                        {
+                            imagePath = Url.Content("~/Content/Images/" + imagePath);
+                        }
+                    }
+                    <a href="@Url.Action("ProductDetail", "Home", new { id = item.ProductID })">
+                        <img src="@imagePath" class="card-img-top" alt="@item.ProductName" style="height: 150px; object-fit: cover;">
+                    </a>
+                    <div class="card-body text-center">
+                        <h6 class="card-title">@item.ProductName</h6>
+                        <p class="card-text text-primary fw-bold">
+                            @item.ProductPrice.ToString("N0") ₫
+                        </p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

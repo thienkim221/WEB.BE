@@ -13,10 +13,10 @@ namespace WEB.BE.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class MyStoreEntities : DbContext
+    public partial class MyStoreEntities1 : DbContext
     {
-        public MyStoreEntities()
-            : base("name=MyStoreEntities")
+        public MyStoreEntities1()
+            : base("name=MyStoreEntities1")
         {
         }
     
@@ -30,6 +30,7 @@ namespace WEB.BE.Models
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<OrderDetail> OrderDetails { get; set; }
         public virtual DbSet<Product> Products { get; set; }
+        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<User> Users { get; set; }
     }
 }
