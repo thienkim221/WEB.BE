@@ -9,7 +9,7 @@
 <hr />
 
 <!-- Form tìm kiếm -->
-@using (Html.BeginForm("Index", "Products", FormMethod.Get))
+@using (Html.BeginForm("Index", "Products", new { area = "Admin" }, FormMethod.Get, null))
 {
     <div class="row mb-3">
 
@@ -54,13 +54,15 @@
     </div>
 
     <!-- Sắp xếp -->
-    <div class="mb-3 text-center">
-        <strong>Sắp xếp:</strong>
-        @Html.ActionLink("Tên ↑", "Index", new { sortOrder = "name_asc", searchTerm = Model.SearchTerm }) |
-        @Html.ActionLink("Tên ↓", "Index", new { sortOrder = "name_desc", searchTerm = Model.SearchTerm }) |
-        @Html.ActionLink("Giá ↑", "Index", new { sortOrder = "price_asc", searchTerm = Model.SearchTerm }) |
-        @Html.ActionLink("Giá ↓", "Index", new { sortOrder = "price_desc", searchTerm = Model.SearchTerm })
-    </div>
+<div class="mb-3 text-center">
+    <strong>Sắp xếp:</strong>
+    @Html.ActionLink("Tên ↑", "Index", "Products", new { area = "Admin", sortOrder = "name_asc", searchTerm = Model.SearchTerm }, null)|
+    @Html.ActionLink("Tên ↓", "Index", "Products", new { area = "Admin", sortOrder = "name_desc", searchTerm = Model.SearchTerm }, null)|
+    @Html.ActionLink("Giá ↑", "Index", "Products", new { area = "Admin", sortOrder = "price_asc", searchTerm = Model.SearchTerm }, null)|
+    @Html.ActionLink("Giá ↓", "Index", "Products", new { area = "Admin", sortOrder = "price_desc", searchTerm = Model.SearchTerm }, null)
+   
+    
+</div>
 }
 
 <!-- Bảng danh sách sản phẩm đúng chuẩn -->
@@ -89,7 +91,7 @@
                     <td>@item.ProductName</td>
                     <td>@item.ProductPrice.ToString("N0") VNĐ</td>
                     <td>@item.Quantity</td>
-                    <td> @item.Category.CategoryName</td>      
+                    <td> @item.Category.CategoryName</td>
 
 
                     <td>
