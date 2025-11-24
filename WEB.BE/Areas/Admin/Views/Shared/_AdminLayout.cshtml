@@ -2,70 +2,96 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - QUẢN TRỊ WEBSITE</title>
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
+    <title>@ViewBag.Title - Admin Shopee Style</title>
+    <link rel="stylesheet" href="~/Content/bootstrap.css" />
+    <style>
+        body {
+            background: #f5f5f5;
+            font-family: Arial, sans-serif;
+        }
+        /* Header */
+        .admin-header {
+            background: #ee4d2d;
+            padding: 12px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+            .admin-header .search-box input {
+                width: 500px;
+                padding: 8px;
+                border: none;
+                border-radius: 3px;
+            }
+
+            .admin-header .logo {
+                font-size: 22px;
+                font-weight: bold;
+            }
+
+        /* Sidebar */
+        .sidebar {
+            width: 230px;
+            background: #fff;
+            min-height: 100vh;
+            float: left;
+            border-right: 1px solid #ddd;
+            padding-top: 20px;
+        }
+
+            .sidebar a {
+                display: block;
+                padding: 12px 20px;
+                color: #333;
+                text-decoration: none;
+                font-size: 15px;
+            }
+
+                .sidebar a:hover {
+                    background: #ffe9e4;
+                }
+
+        /* Main content */
+        .main-content {
+            margin-left: 230px;
+            padding: 20px;
+        }
+    </style>
 </head>
-
 <body>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
-        <div class="container">
 
-            @Html.ActionLink("QUẢN TRỊ WEBSITE", "Index", "Home", new { area = "Admin" }, new { @class = "navbar-brand" })
+    <div class="admin-header">
+        <div class="logo">Shopee Admin</div>
 
-            <button type="button" class="navbar-toggler" data-bs-toggle="collapse"
-                    data-bs-target=".navbar-collapse" title="Toggle navigation"
-                    aria-controls="navbarSupportedContent" aria-expanded="false"
-                    aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-
-                    <li class="nav-item">
-                        @Html.ActionLink("Dashboard", "Index", "Home", new { area = "Admin" }, new { @class = "nav-link" })
-                    </li>
-
-                    <li class="nav-item">
-                        @Html.ActionLink("Danh mục", "Index", "Categories", new { area = "Admin" }, new { @class = "nav-link" })
-                    </li>
-
-                    <li class="nav-item">
-                        @Html.ActionLink("Sản phẩm", "Index", "Products", new { area = "Admin" }, new { @class = "nav-link" })
-                    </li>
-
-                    <li class="nav-item">
-                        @Html.ActionLink("Khách hàng", "Index", "Customers", new { area = "Admin" }, new { @class = "nav-link" })
-                    </li>
-
-                    <li class="nav-item">
-                        @Html.ActionLink("Đơn hàng", "Index", "Orders", new { area = "Admin" }, new { @class = "nav-link" })
-                    </li>
-
-                    <li class="nav-item">
-                        @Html.ActionLink("Tài khoản", "Index", "Users", new { area = "Admin" }, new { @class = "nav-link" })
-                    </li>
-
-                </ul>
-            </div>
+        <div class="search-box">
+            <input type="text" placeholder="Tìm kiếm sản phẩm, đơn hàng…" />
         </div>
-    </nav>
+
+        <div class="profile">
+            @User.Identity.Name |
+            <a href="/Account/Logout" style="color:white;">Đăng xuất</a>
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <a href="/Admin/Home">🏠 Dashboard</a>
+        <a href="/Admin/Products">📦 Sản phẩm</a>
+        <a href="/Admin/Categories">📁 Danh mục</a>
+        <a href="/Admin/Orders">🧾 Đơn hàng</a>
+        <a href="/Admin/Users">👤 Người dùng</a>
+    </div>
 
     <div class="container body-content">
         @RenderBody()
         <hr />
 
-        <footer class="text-center mt-3">
-            <p>&copy; @DateTime.Now.Year - Trang quản trị</p>
-            <h5>Contact</h5>
-            <p>Tên các thành viên trong nhóm</p>
-        </footer>
+            <div class="footer-bottom">
+                © 2025 Shopee. Thiên Kim_Thanh Huyền_Thảo Vy.
+            </div>
     </div>
-
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+    @RenderSection("Scripts", required: false)
 </body>
 </html>
+

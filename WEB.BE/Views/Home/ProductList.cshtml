@@ -1,0 +1,37 @@
+﻿@model PagedList.IPagedList<WEB.BE.Models.Product>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "ProductList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Danh sách sản phẩm</h2>
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-3 mb-4">
+            <div class="card p-2 shadow-sm">
+                <img src="@Url.Content("~/Content/images/" + item.ProductImage)"
+                     class="img-fluid" alt="Ảnh sản phẩm"
+                     style="height:150px; object-fit:cover;" />
+
+                <div class="card-body">
+                    <h5 class="card-title">@item.ProductName</h5>
+                    <p class="card-text text-danger fw-bold">@item.ProductPrice VNĐ</p>
+
+                    <a href="@Url.Action("ProductDetail", "Home", new { id = item.ProductID })"
+                       class="btn btn-primary btn-sm">
+                        Xem chi tiết
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="text-center">
+    @Html.PagedListPager(Model, page => Url.Action("ProductList",
+        new { page }))
+</div>
+

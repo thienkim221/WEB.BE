@@ -61,7 +61,7 @@ namespace WEB.BE.Controllers
                 // 3. Tạo bản ghi thông tin khách hàng trong bảng Customer
                 var customer = new Customer
                 {
-                    Username = model.Username,
+                    UserID = user.UserID,
                     CustomerName = model.CustomerName,
                     CustomerEmail = model.CustomerEmail,
                     CustomerPhone = model.CustomerPhone,
@@ -134,16 +134,22 @@ namespace WEB.BE.Controllers
         {
             string username = User.Identity.Name;
 
-            // Lấy dữ liệu cho ProfileInfoVM
-            var customer = db.Customers.SingleOrDefault(c => c.Username == username);
-
-            if (customer == null)
+            // Tìm user theo username (vì Customer không còn Username nữa)
+            var user = db.Users.SingleOrDefault(u => u.Username == username);
+            if (user == null)
             {
-                // Khách hàng không tồn tại hoặc chưa tạo thông tin cá nhân
                 return RedirectToAction("Login", "Account");
             }
 
-            // Map Entity sang ViewModel
+            // Tìm customer theo UserID
+            var customer = db.Customers.SingleOrDefault(c => c.UserID == user.UserID);
+            if (customer == null)
+            {
+                // Chưa tạo hồ sơ khách hàng
+                return RedirectToAction("CreateProfile", "Customer");
+            }
+
+            // Map sang ViewModel
             var model = new ProfileInfoVM
             {
                 Username = username,
@@ -154,8 +160,9 @@ namespace WEB.BE.Controllers
                 CustomerAddress = customer.CustomerAddress
             };
 
-            return View(model); // View này sẽ là ProfileInfo.cshtml
+            return View(model);
         }
+
 
         // POST: Account/ProfileInfo (Cập nhật thông tin cá nhân)
         [HttpPost]

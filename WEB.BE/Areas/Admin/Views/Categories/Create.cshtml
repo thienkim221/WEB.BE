@@ -1,29 +1,44 @@
 ﻿@model WEB.BE.Models.Category
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Thêm Danh Mục";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h2 class="bg-danger">THÊM HÀNG HÓA</h2>
+<h2 class="text-primary mb-3">➕ Thêm Danh Mục Mới</h2>
 
-
-@using (Html.BeginForm())
+@using (Html.BeginForm("Create", "Categories", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <hr />
+
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
+        <!-- Tên danh mục -->
+        <div class="form-group mb-3">
+            <label class="control-label col-md-2">Tên danh mục</label>
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.CategoryName, new { @class = "form-control", placeholder = "Nhập tên danh mục..." })
+                @Html.ValidationMessageFor(model => model.CategoryName, "", new { @class = "text-danger" })
+            </div>
+        </div>
 
-        @Html.Partial("PVCreateEditCategory", Model)
+        <!-- Mô tả (nếu có) -->
+        <div class="form-group mb-3">
+            <label class="control-label col-md-2">Mô tả</label>
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.Description, new { @class = "form-control", rows = 3 })
+            </div>
+        </div>
+
+        <!-- Nút Lưu -->
+        <div class="form-group mt-3">
+            <div class="col-md-offset-2 col-md-10">
+                <button type="submit" class="btn btn-success">💾 Lưu</button>
+                @Html.ActionLink("Hủy", "Index", null, new { @class = "btn btn-secondary ms-2" })
+            </div>
+        </div>
+
     </div>
 }
-
-
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
-

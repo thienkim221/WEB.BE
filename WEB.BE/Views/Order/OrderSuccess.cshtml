@@ -1,0 +1,40 @@
+﻿@model WEB.BE.Models.Order
+@{
+    ViewBag.Title = "Đặt hàng thành công";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="card-header bg-success text-white text-center">
+            <h2>ĐẶT HÀNG THÀNH CÔNG</h2>
+        </div>
+
+        <div class="card-body text-center">
+
+            <h4 class="mt-3">Cảm ơn bạn đã mua hàng!</h4>
+
+            <p class="mt-2">
+                Mã đơn hàng của bạn là:
+                <strong class="text-primary" style="font-size:22px;">
+                    @Model.OrderID
+                </strong>
+            </p>
+
+            <p>Ngày đặt hàng: @Model.OrderDate.ToString("dd/MM/yyyy HH:mm")</p>
+
+            <p style="font-size:18px;">
+                Tổng thanh toán:
+                <strong class="text-danger">@Model.TotalAmount.ToString("N0") ₫</strong>
+            </p>
+
+            <hr />
+
+            <div class="mt-4">
+                @Html.ActionLink("Về trang chủ", "Index", "Home", null, new { @class = "btn btn-primary btn-lg mx-2" })
+                @Html.ActionLink("Xem lịch sử đơn hàng", "OrderHistory", "Order", null, new { @class = "btn btn-outline-secondary btn-lg mx-2" })
+            </div>
+
+        </div>
+    </div>
+</div>
+

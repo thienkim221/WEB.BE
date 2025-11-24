@@ -1,0 +1,30 @@
+﻿@model WEB.BE.Models.User
+@{
+    ViewBag.Title = "Xóa tài khoản";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 class="text-danger">Xác nhận xóa tài khoản</h2>
+
+<div class="alert alert-danger">Bạn có chắc chắn muốn xóa tài khoản này?</div>
+
+<table class="table table-bordered">
+    <tr>
+        <th>Tên đăng nhập</th>
+        <td>@Model.Username</td>
+    </tr>
+    <tr>
+        <th>Vai trò</th>
+        <td>@Model.UserRole</td>
+    </tr>
+</table>
+
+@using (Html.BeginForm("DeleteConfirmed", "Users", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.Username)
+
+    <button type="submit" class="btn btn-danger">Xóa</button>
+    @Html.ActionLink("Hủy", "Index", null, new { @class = "btn btn-secondary" })
+}
+

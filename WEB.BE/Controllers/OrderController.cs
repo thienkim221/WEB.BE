@@ -31,38 +31,38 @@ namespace WEB.BE.Controllers
             }
 
             // 2. Lấy thông tin người dùng đã đăng nhập
-            string username = User.Identity.Name; // Requires System.Web.Security or similar setup
+            string username = User.Identity.Name;
             var user = db.Users.SingleOrDefault(u => u.Username == username);
 
             if (user == null)
             {
-                // Nếu User không khớp với DB (hoặc chưa đăng nhập), chuyển hướng đến Login
                 return RedirectToAction("Login", "Account");
             }
 
-            // 3. Lấy thông tin khách hàng để điền địa chỉ mặc định
-            var customer = db.Customers.SingleOrDefault(c => c.Username == user.Username);
+            // 3. Lấy thông tin khách hàng dựa vào UserID
+            var customer = db.Customers.SingleOrDefault(c => c.UserID == user.UserID);
 
             if (customer == null)
             {
-                // Nếu không có thông tin khách hàng, chuyển hướng đến trang thông tin cá nhân
+                // Chưa tạo hồ sơ khách hàng
                 return RedirectToAction("ProfileInfo", "Account");
             }
 
-            // 4. Tạo ViewModel và gán dữ liệu
+            // 4. Tạo ViewModel Checkout
             var model = new CheckoutVM
             {
                 CartItems = cart.Items.ToList(),
                 TotalAmount = cart.TotalValue(),
                 CustomerID = customer.CustomerID,
-                Username = customer.Username,
-                ShippingAddress = customer.CustomerAddress, // Địa chỉ mặc định
+                Username = user.Username, // Dùng từ bảng User
+                ShippingAddress = customer.CustomerAddress,
                 OrderDate = DateTime.Now,
                 PaymentStatus = "Pending"
             };
 
             return View(model);
         }
+
 
         // POST: Order/Checkout (Xử lý đặt hàng)
         [HttpPost]
@@ -94,6 +94,7 @@ namespace WEB.BE.Controllers
                 PaymentMethod = model.PaymentMethod,
                 ShippingMethod = model.ShippingMethod,
                 ShippingAddress = model.ShippingAddress,
+                AddressDelivery = model.ShippingAddress,
 
                 OrderDetails = cart.Items.Select(item => new OrderDetail
                 {
@@ -130,18 +131,27 @@ namespace WEB.BE.Controllers
         // GET: Order/OrderHistory (Tra cứu Lịch sử mua hàng)
         public ActionResult OrderHistory()
         {
-            // Lấy username người dùng hiện tại
+            // Lấy username người dùng hiện tại (username trong bảng User)
             string username = User.Identity.Name;
 
-            // Lấy CustomerID
-            var customer = db.Customers.SingleOrDefault(c => c.Username == username);
+            // Lấy User
+            var user = db.Users.SingleOrDefault(u => u.Username == username);
 
-            if (customer == null)
+            if (user == null)
             {
                 return RedirectToAction("Login", "Account");
             }
 
-            // Lấy danh sách đơn hàng của khách hàng này
+            // Lấy Customer dựa vào UserID
+            var customer = db.Customers.SingleOrDefault(c => c.UserID == user.UserID);
+
+            if (customer == null)
+            {
+                // Chưa tạo thông tin khách hàng -> yêu cầu cập nhật hồ sơ
+                return RedirectToAction("ProfileInfo", "Account");
+            }
+
+            // Lấy danh sách đơn hàng của khách hàng
             var orders = db.Orders
                             .Where(o => o.CustomerID == customer.CustomerID)
                             .OrderByDescending(o => o.OrderDate)
@@ -149,5 +159,9 @@ namespace WEB.BE.Controllers
 
             return View(orders);
         }
+        // Danh sách đơn hàng của khách
+        // Danh sách đơn hàng của 1 khách
+        
     }
+
 }

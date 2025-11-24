@@ -1,18 +1,33 @@
-﻿
-@{
-    Layout = null;
+﻿@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
 
-<!DOCTYPE html>
+<h2 style="color:#ee4d2d;">Tổng quan hệ thống</h2>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-</head>
-<body>
-    <div> 
-        SOPPE
+<div class="row">
+    <div class="col-md-3">
+        <div class="panel" style="background:#fff; padding:20px; border-radius:5px;">
+            <h4>📦 Sản phẩm</h4>
+            <h2>@ViewBag.ProductCount</h2>
+        </div>
     </div>
-</body>
-</html>
+    <div class="col-md-3">
+        <div class="panel" style="background:#fff; padding:20px; border-radius:5px;">
+            <h4>📁 Danh mục</h4>
+            <h2>@ViewBag.CategoryCount</h2>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="panel" style="background:#fff; padding:20px; border-radius:5px;">
+            <h4>🧾 Đơn hàng</h4>
+            <h2>@ViewBag.OrderCount</h2>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="panel" style="background:#fff; padding:20px; border-radius:5px;">
+            <h4>👤 Người dùng</h4>
+            <h2>@ViewBag.UserCount</h2>
+        </div>
+    </div>
+</div>

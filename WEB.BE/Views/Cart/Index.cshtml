@@ -80,7 +80,6 @@
                             <th>
                                 @* Nút xóa tất cả *@
                                 @Html.ActionLink("Xóa tất cả mặt hàng trong giỏ", "ClearCart", "Cart", null, null)
-                                <img src="~/Images/remove.png" style="max-height:20px;" alt="Xóa" />
                             </th>
                         </tr>
                     </thead>
@@ -88,7 +87,11 @@
                         @foreach (var item in Model.Items)
                         {
                             <tr>
-                                <td><img src="@item.ProductImage" alt="@item.ProductName" class="cart-img" /></td>
+                                <td>
+                                    <img src="@Url.Content("~/Content/images/" + item.ProductImage)"
+                                         alt="@item.ProductName"
+                                         class="cart-img" />
+                                </td>
                                 <td>@item.ProductName</td>
                                 <td>
                                     @* Nút giảm số lượng *@
@@ -116,7 +119,6 @@
                                 <td>
                                     @* Nút xóa từng sản phẩm *@
                                     @Html.ActionLink("Xóa", "RemoveItem", "Cart", new { id = item.ProductID }, null)
-                                    <img src="~/Images/remove.png" style="max-height:20px;" alt="Xóa" />
                                 </td>
                             </tr>
                         }
@@ -140,10 +142,7 @@
             </div>
         </div>
 
-        @* Hiển thị Sản phẩm tương tự (Partial View) *@
-        <div class="mt-4">
-            @Html.Partial("_PVSimilarProduct", Model)
-        </div>
+       
     }
 </div>
 

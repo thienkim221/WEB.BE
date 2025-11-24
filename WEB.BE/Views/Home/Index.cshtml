@@ -2,51 +2,88 @@
 @using PagedList.Mvc;
 
 @{
-    ViewBag.Title = "Trang chủ - MyStore";
+    ViewBag.Title = "Trang chủ";
     Layout = "~/Views/Shared/_Layout.cshtml";
-
-    // Gán Model.SearchTerm vào ViewBag.CurrentFilter
-    ViewBag.CurrentFilter = Model.SearchTerm;
 }
-<div class="text-center mb-4">
-    @* Banner/Hình ảnh *@
-    <img src="https://ekosnegocios.com/image/posts/May2022/DtRf9U2W4zcu1TYWfjpP.jpg"
-         alt="Banner MyStore"
-         class="img-fluid rounded shadow-sm"
-         style="width:100%; max-height:400px; object-fit:cover;" />
+
+<!-- 🔶 TOP BANNER -->
+<div class="container-fluid p-0">
+    <img src="https://assets.pandaily.com/uploads/2022/09/%E6%9C%AA%E5%91%BD%E5%90%8D%E7%9A%84%E8%AE%BE%E8%AE%A1-74.jpg"
+         class="img-fluid"
+         style="width:100%; object-fit:cover;" />
 </div>
 
-@* FORM TÌM KIẾM (ĐÃ LOẠI BỎ CĂN GIỮA) *@
-@* KHÔNG CÓ DIV FLEXBOX BAO NGOÀI NÀO NỮA *@
-@using (Html.BeginForm("Index", "Home", FormMethod.Get))
-{
-    @* Sử dụng w-50 mx-auto để nó nằm ở giữa 50% hoặc căn trái theo mặc định *@
-    <div class="input-group mb-5 w-50 mx-auto">
-        <input type="text"
-               name="searchTerm"
-               value="@Model.SearchTerm"
-               class="form-control"
-               placeholder="Nhập tên sản phẩm hoặc mô tả..." />
-        <button class="btn btn-primary" type="submit">Tìm kiếm</button>
-    </div>
-}
 
-<div class="container all-products-container">
-
-    @* 🌟 PHẦN SẢN PHẨM NỔI BẬT *@
+<!-- 🔶 SHOPEE MALL -->
+<div class="container mt-4">
     @if (Model.FeaturedProducts != null && Model.FeaturedProducts.Any())
     {
-        <h3>Sản phẩm nổi bật</h3>
-        @Html.Partial("_PVFeatureProduct", Model.FeaturedProducts)
+        @Html.Partial("_PVFeaturedProduct", Model.FeaturedProducts)
     }
-
-    <hr class="mt-5" />
-
-    @* 🆕 PHẦN SẢN PHẨM MỚI *@
-    <h3>Danh sách sản phẩm</h3>
-    @Html.Partial("_PVNewProduct", Model)
+    else
+    {
+        <p class="text-muted">Không có sản phẩm nổi bật.</p>
+    }
 </div>
 
-@section Scripts {
-    @* Đảm bảo các script của bạn được tải *@
-}
+<!-- 🔶 DANH MỤC + TẤT CẢ SẢN PHẨM (giống Shopee) -->
+<div class="container mt-5">
+
+    <div class="row">
+
+        <!-- SIDEBAR -->
+        <div class="col-12 col-md-2">
+            <h6 class="fw-bold mb-3">Tất Cả Danh Mục</h6>
+            <div class="list-group">
+                @foreach (var cat in Model.Categories)
+                {
+                    <a href="/Home/ProductByCategory/@cat.CategoryID"
+                       class="list-group-item">
+                        @cat.CategoryName
+                    </a>
+                }
+            </div>
+
+            <hr />
+
+            <h6 class="fw-bold">Bộ Lọc Tìm Kiếm</h6>
+
+            <p class="small text-muted mt-2">Nơi Bán</p>
+            <div class="form-check"><input type="checkbox" /> TP. HCM</div>
+            <div class="form-check"><input type="checkbox" /> Hà Nội</div>
+
+            <p class="small text-muted mt-3">Thương Hiệu</p>
+            <div class="form-check"><input type="checkbox" /> Coolmate</div>
+            <div class="form-check"><input type="checkbox" /> Lados</div>
+            <div class="form-check"><input type="checkbox" /> Aviano</div>
+
+        </div>
+
+
+        <!-- PRODUCTS -->
+        <div class="col-12 col-md-10">
+
+            <!-- SORT BAR -->
+            <div class="d-flex justify-content-between align-items-center border p-2 mb-3 bg-light">
+                <div class="fw-bold">Sắp xếp theo:</div>
+                <div>
+                    <button class="btn btn-sm btn-outline-secondary">Phổ Biến</button>
+                    <button class="btn btn-sm btn-outline-secondary">Mới Nhất</button>
+                    <button class="btn btn-sm btn-outline-secondary">Bán Chạy</button>
+
+                    <select class="form-select form-select-sm d-inline-block" style="width:120px;">
+                        <option>Giá</option>
+                        <option>Thấp → Cao</option>
+                        <option>Cao → Thấp</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- PRODUCT GRID -->
+            @Html.Partial("_PVNewProduct", Model)
+
+        </div>
+
+    </div>
+
+</div>

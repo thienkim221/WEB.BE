@@ -11,21 +11,28 @@
                 <div class="card h-100 shadow-sm">
                     @* Logic hiển thị ảnh (giả định đã được xử lý trong View này) *@
                     @{
-                        string imagePath = item.ProductImage;
-                        if (!imagePath.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+                        string img = item.ProductImage;
+
+                        if (string.IsNullOrEmpty(img))
                         {
-                            imagePath = Url.Content("~/Content/Images/" + imagePath);
+                            img = Url.Content("~/Content/images/no-image.png");
+                        }
+                        else if (!img.StartsWith("http"))
+                        {
+                            img = Url.Content("~/Content/images/" + img);
                         }
                     }
                     <a href="@Url.Action("ProductDetail", "Home", new { id = item.ProductID })">
-                        <img src="@imagePath" class="card-img-top" alt="@item.ProductName" style="height: 150px; object-fit: cover;">
+                        <img src="@img" class="card-img-top" alt="@item.ProductName" style="height: 200px; object-fit: cover;">
                     </a>
-                    <div class="card-body text-center">
+
+                    <div class="card-body">
                         <h6 class="card-title">@item.ProductName</h6>
-                        <p class="card-text text-primary fw-bold">
+                        <p class="card-text text-danger fw-bold">
                             @item.ProductPrice.ToString("N0") ₫
                         </p>
                     </div>
+
                 </div>
             </div>
         }

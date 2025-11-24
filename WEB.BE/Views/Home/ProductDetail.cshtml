@@ -1,0 +1,74 @@
+﻿@model WEB.BE.Models.ViewModels.ProductDetailsVM
+@using PagedList.Mvc;
+@using PagedList;
+
+@{
+    ViewBag.Title = "ProductDetail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+
+// ===== Helper xử lý ảnh =====
+    Func<string, string>
+    GetImg = (string img) =>
+    {
+    if (string.IsNullOrWhiteSpace(img))
+    return Url.Content("~/Content/images/no-image.png");
+
+    if (!img.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+    return Url.Content("~/Content/images/" + img);
+
+    return img; // là URL online
+    };
+    }
+
+    <div class="container mt-4">
+
+        <!-- ==========================================
+             THÔNG TIN SẢN PHẨM CHÍNH
+        =========================================== -->
+        <div class="row">
+            <div class="col-md-5">
+                <img src="@GetImg(Model.Product.ProductImage)"
+                     class="img-fluid border rounded" />
+            </div>
+
+            <div class="col-md-7">
+                <h2>@Model.Product.ProductName</h2>
+
+                <h4 class="text-danger mt-3">
+                    Giá: @Model.Product.ProductPrice.ToString("N0") đ
+                </h4>
+
+                <p class="mt-3"><b>Mô tả:</b> @Model.Product.ProductDescription</p>
+                <p><b>Số lượng tồn:</b> @Model.Product.Quantity</p>
+                <p><b>Danh mục:</b> @Model.Product.Category.CategoryName</p>
+
+                <!-- FORM THÊM GIỎ HÀNG -->
+                @using (Html.BeginForm("AddToCart", "Cart", FormMethod.Post))
+                {
+                    @Html.Hidden("id", Model.Product.ProductID)
+
+                    <div class="mt-3">
+                        <label>Số lượng:</label>
+                        <input type="number" name="quantity" value="1" min="1"
+                               class="form-control w-25" />
+                    </div>
+
+                    <button type="submit" class="btn btn-primary mt-3">
+                        Thêm vào giỏ hàng
+                    </button>
+                }
+            </div>
+        </div>
+
+        <!-- ==========================================
+             PHÂN TRANG
+        =========================================== -->
+        <div class="text-center">
+            @Html.PagedListPager(
+                Model.TopProducts,
+                page => Url.Action("ProductDetail", new { id = Model.Product.ProductID, page })
+            )
+        </div>
+
+    </div>

@@ -7,45 +7,49 @@
 @using (Html.BeginForm("Edit", "Products", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
-    
+
     @Html.HiddenFor(m => m.ProductID)
 
-        <div class="form-group">
+    <div class="form-group">
         @Html.LabelFor(m => m.CategoryID, "Danh mục")
         @Html.DropDownList("CategoryID", null, new { @class = "form-control" })
         @Html.ValidationMessageFor(m => m.CategoryID)
-            </div>
+    </div>
 
-        <div class="form-group">
+    <div class="form-group">
         @Html.LabelFor(m => m.ProductName)
         @Html.TextBoxFor(m => m.ProductName, new { @class = "form-control" })
         @Html.ValidationMessageFor(m => m.ProductName)
-            </div>
+    </div>
 
-        <div class="form-group">
+    <div class="form-group">
         @Html.LabelFor(m => m.ProductDescription)
         @Html.TextAreaFor(m => m.ProductDescription, new { @class = "form-control" })
         @Html.ValidationMessageFor(m => m.ProductDescription)
-            </div>
+    </div>
 
-        <div class="form-group">
+    <div class="form-group">
         @Html.LabelFor(m => m.ProductPrice)
         @Html.TextBoxFor(m => m.ProductPrice, new { @class = "form-control" })
         @Html.ValidationMessageFor(m => m.ProductPrice)
-            </div>
+    </div>
 
-        <div class="form-group">
+    <div class="form-group">
         @Html.Label("Ảnh hiện tại")
         <br />
-        <img src="~/Images/@Model.ProductImage" width="120" />
-            </div>
+        <img src="@Url.Content("~/Content/images/" + Model.ProductImage)" width="120" />
+    </div>
 
-        <div class="form-group">
+    <div class="form-group">
         @Html.Label("Chọn ảnh mới")
         <input type="file" name="ImageFile" class="form-control" />
-            </div>
+    </div>
 
     <button type="submit" class="btn btn-success">Lưu</button>
 }
 
 <a href="@Url.Action("Index")" class="btn btn-secondary">Quay lại</a>
+@Html.HiddenFor(m => m.Thumb)
+@Html.HiddenFor(m => m.Price)
+@Html.HiddenFor(m => m.Discount)
+@Html.HiddenFor(m => m.Quantity)

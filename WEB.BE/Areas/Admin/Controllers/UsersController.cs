@@ -15,8 +15,8 @@ namespace WEB.BE.Areas.Admin.Controllers
         // INDEX
         public ActionResult Index()
         {
-            var admins = db.Users.Where(u => u.UserRole == "Admin").ToList();
-            return View(admins);
+            var users = db.Users.ToList();
+            return View(users);
         }
 
         // CREATE

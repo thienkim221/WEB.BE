@@ -48,12 +48,12 @@ namespace WEB.BE.Areas.Admin.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "CategoryID,CategoryName")] Category category)
+        public ActionResult Create(Category category)
         {
             if (ModelState.IsValid)
             {
                 db.Categories.Add(category);
-                await db.SaveChangesAsync();
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
 

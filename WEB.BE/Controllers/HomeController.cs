@@ -12,12 +12,13 @@ namespace WEB.BE.Controllers
     public class HomeController : Controller
     {
         private MyStoreEntities db = new MyStoreEntities();
-
-        // GET: Home/Index (Hiển thị Trang chủ)
         public ActionResult Index(string searchTerm, int? page)
         {
             var model = new HomeProductVM();
             IQueryable<Product> products = db.Products.AsQueryable();
+
+            // Load danh mục vào ViewModel
+            model.Categories = db.Categories.ToList();
 
             // Tìm kiếm sản phẩm
             if (!string.IsNullOrEmpty(searchTerm))
@@ -35,17 +36,18 @@ namespace WEB.BE.Controllers
                 .Take(10)
                 .ToList();
 
-            // Lấy 20 sản phẩm mới và phân trang
+            // Lấy 20 sản phẩm ít bán nhất + phân trang
             int pageNumber = page ?? 1;
-            int pageSize = model.PageSize; // Mặc định 6 sản phẩm / trang
+            int pageSize = model.PageSize;
 
             model.NewProducts = products
-                .OrderBy(p => p.OrderDetails.Count()) // Ít người mua nhất
-                .Take(20) // Lấy 20 sản phẩm
+                .OrderBy(p => p.OrderDetails.Count())
+                .Take(20)
                 .ToPagedList(pageNumber, pageSize);
 
             return View(model);
         }
+
         // GET: Home/ProductDetail/5 (Hiển thị chi tiết sản phẩm)
         public ActionResult ProductDetail(int? id, int? quantity, int? page)
         {
@@ -114,6 +116,23 @@ namespace WEB.BE.Controllers
                 .ToPagedList(pageNumber, pageSize);
 
             return View(model);
+        }
+        public ActionResult ProductByCategory(int id, int? page)
+        {
+            int pageNumber = page ?? 1;
+            int pageSize = 12; // số sản phẩm mỗi trang
+
+            var products = db.Products
+                .Where(p => p.CategoryID == id)
+                .OrderBy(p => p.ProductName)
+                .ToPagedList(pageNumber, pageSize);
+
+            ViewBag.CategoryName = db.Categories
+                .Where(c => c.CategoryID == id)
+                .Select(c => c.CategoryName)
+                .FirstOrDefault();
+
+            return View(products);
         }
 
     }

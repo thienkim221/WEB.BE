@@ -19,5 +19,7 @@ namespace WEB.BE.Models.ViewModels
 
         // Danh sách 20 sản phẩm mới đã phân trang
         public IPagedList<Product> NewProducts { get; set; }
+        public List<Category> Categories { get; set; }
+
     }
 }

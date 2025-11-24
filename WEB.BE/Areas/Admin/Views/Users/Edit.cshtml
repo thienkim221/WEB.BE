@@ -1,0 +1,31 @@
+﻿@model WEB.BE.Models.User
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 class="text-warning">Sửa tài khoản quản trị</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(m => m.Username)
+
+    <div class="form-group">
+        <label>Tên đăng nhập</label>
+        <input class="form-control" value="@Model.Username" disabled />
+    </div>
+
+    <div class="form-group">
+        <label>Mật khẩu mới</label>
+        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Password)
+    </div>
+
+    <input type="hidden" name="UserRole" value="Admin" />
+
+    <button type="submit" class="btn btn-warning">Lưu thay đổi</button>
+    @Html.ActionLink("Quay lại", "Index", null, new { @class = "btn btn-secondary" })
+}
+

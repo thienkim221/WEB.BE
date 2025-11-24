@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Data.Entity.Validation;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -40,7 +41,7 @@ namespace WEB.BE.Areas.Admin.Controllers
             // Tìm Kiếm sản phẩm dựa trên giá tối đa
             if (maxPrice.HasValue)
             {
-                products = products.Where(p => p.ProductPrice >= maxPrice.Value);
+                products = products.Where(p => p.ProductPrice <= maxPrice.Value);
             }
             // Áp dụng sắp xếp dựa trên lựa chọn của người dùng
             switch (sortOrder)
@@ -66,7 +67,7 @@ namespace WEB.BE.Areas.Admin.Controllers
             // Đoạn code liên quan tới phân trang
             // Lấy số trang hiện tại (mặc định là trang 1 nếu không có giá trị)
             int pageNumber = page ?? 1;
-            int pageSize = 2; // Số sản phẩm mỗi trang
+            int pageSize = 22; // Số sản phẩm mỗi trang
 
             //đóng câu lệnh này, sử dụng ToPagedList để lấy danh sách phân trang
             //model.Products = products.ToList();
@@ -105,7 +106,7 @@ namespace WEB.BE.Areas.Admin.Controllers
         // POST: Admin/Products/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ProductID,ProductName,ProductPrice,CategoryID,ProductDescription")] Product product)
+        public ActionResult Create([Bind(Include = "ProductID,ProductName,ProductPrice,CategoryID,ProductDescription,Quantity,ProductImage,Thumb,Price,Discount")] Product product)
         {
             if (ModelState.IsValid)
             {
@@ -141,17 +142,41 @@ namespace WEB.BE.Areas.Admin.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "ProductID,CategoryID,ProductName,ProductDecription,ProductPrice,ProductImage")] Product product)
+        public async Task<ActionResult> Edit(Product product, HttpPostedFileBase ImageFile)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(product).State = EntityState.Modified;
+                var existingProduct = await db.Products.FindAsync(product.ProductID);
+                if (existingProduct == null)
+                    return HttpNotFound();
+
+                // Update các field có trong form
+                existingProduct.ProductName = product.ProductName;
+                existingProduct.ProductDescription = product.ProductDescription;
+                existingProduct.ProductPrice = product.ProductPrice;
+                existingProduct.CategoryID = product.CategoryID;
+
+                // Update ảnh nếu có upload mới
+                if (ImageFile != null && ImageFile.ContentLength > 0)
+                {
+                    string fileName = Path.GetFileName(ImageFile.FileName);
+                    string path = Path.Combine(Server.MapPath("~/Content/images"), fileName);
+                    ImageFile.SaveAs(path);
+
+                    existingProduct.ProductImage = fileName;
+                }
+
+                // Các field không xuất hiện trong form nhưng vẫn giữ nguyên:
+                // Thumb, Price, Discount, Quantity
+
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
+
             ViewBag.CategoryID = new SelectList(db.Categories, "CategoryID", "CategoryName", product.CategoryID);
             return View(product);
         }
+
 
         // GET: Admin/Products/Delete/5
         public async Task<ActionResult> Delete(int? id)

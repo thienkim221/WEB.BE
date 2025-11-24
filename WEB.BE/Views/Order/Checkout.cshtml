@@ -1,0 +1,114 @@
+﻿@model WEB.BE.Models.ViewModels.CheckoutVM
+@{
+    ViewBag.Title = "Thanh toán";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="mt-4">Thanh toán đơn hàng</h2>
+<hr />
+
+@if (Model.CartItems == null || !Model.CartItems.Any())
+{
+    <div class="alert alert-warning">
+        Giỏ hàng của bạn đang trống.
+        @Html.ActionLink("Quay lại mua hàng", "Index", "Home")
+    </div>
+}
+else
+{
+    <div class="row">
+
+        <!-- Thông tin giao hàng -->
+        <div class="col-md-7">
+            <div class="card mb-3">
+                <div class="card-header bg-primary text-white">
+                    <h5>Thông tin giao hàng</h5>
+                </div>
+                <div class="card-body">
+
+                    @using (Html.BeginForm("Checkout", "Order", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(m => m.CustomerID)
+                        @Html.HiddenFor(m => m.TotalAmount)
+
+                        <div class="form-group">
+                            <label>Khách hàng</label>
+                            <input class="form-control" value="@Model.Username" readonly />
+                        </div>
+
+                        <div class="form-group">
+                            <label>Địa chỉ giao hàng</label>
+                            @Html.TextAreaFor(m => m.ShippingAddress,
+                                new { @class = "form-control", rows = 3, placeholder = "Nhập địa chỉ giao hàng" })
+                        </div>
+
+                        <div class="form-group">
+                            <label>Phương thức vận chuyển</label>
+                            @Html.DropDownListFor(m => m.ShippingMethod,
+                                new SelectList(new[]
+                                {
+                                    "Nhanh (Giao 1–2 ngày)",
+                                    "Tiết kiệm (3–5 ngày)",
+                                    "Hoả tốc (Trong ngày)"
+                                }),
+                                null,
+                                new { @class = "form-control" })
+                        </div>
+
+                        <div class="form-group">
+                            <label>Phương thức thanh toán</label>
+                            @Html.DropDownListFor(m => m.PaymentMethod,
+                                new SelectList(new[]
+                                {
+                                    "Tiền mặt",
+                                    "Chuyển khoản",
+                                    "Ví điện tử"
+                                }),
+                                null,
+                                new { @class = "form-control" })
+                        </div>
+
+                        <button type="submit" class="btn btn-success mt-3">Xác nhận đặt hàng</button>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Đơn hàng -->
+        <div class="col-md-5">
+            <div class="card">
+                <div class="card-header bg-warning">
+                    <h5>Đơn hàng của bạn</h5>
+                </div>
+                <div class="card-body">
+
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Sản phẩm</th>
+                                <th>SL</th>
+                                <th>Giá</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.CartItems)
+                            {
+                                <tr>
+                                    <td>@item.ProductName</td>
+                                    <td>@item.Quantity</td>
+                                    <td>@item.TotalPrice.ToString("N0") ₫</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    <h4 class="text-danger text-right">
+                        Tổng: @Model.TotalAmount.ToString("N0") ₫
+                    </h4>
+                </div>
+            </div>
+        </div>
+
+    </div>
+}

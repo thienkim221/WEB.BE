@@ -1,45 +1,77 @@
 ﻿@model WEB.BE.Models.Product
-@using (Html.BeginForm("Create", "Products", FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
-    @Html.AntiForgeryToken()
-<div class="form-group">
-    @Html.LabelFor(m => m.ProductName, new { @class = "control-label" })
-    @Html.TextBoxFor(m => m.ProductName, new { @class = "form-control" })
-    @Html.ValidationMessageFor(m => m.ProductName, "", new { @class = "text-danger" })
-</div>
-
-<div class="form-group">
-    @Html.LabelFor(m => m.ProductDescription, new { @class = "control-label" })
-    @Html.TextAreaFor(m => m.ProductDescription, new { @class = "form-control" })
-    @Html.ValidationMessageFor(m => m.ProductDescription, "", new { @class = "text-danger" })
-</div>
-
-<div class="form-group">
-    @Html.LabelFor(m => m.ProductPrice, new { @class = "control-label" })
-    @Html.TextBoxFor(m => m.ProductPrice, new { @class = "form-control", type = "number", step = "1000" })
-    @Html.ValidationMessageFor(m => m.ProductPrice, "", new { @class = "text-danger" })
-</div>
-
-<div class="form-group">
-    @Html.LabelFor(m => m.Quantity, new { @class = "control-label" })
-    @Html.TextBoxFor(m => m.Quantity, new { @class = "form-control", type = "number" })
-    @Html.ValidationMessageFor(m => m.Quantity, "", new { @class = "text-danger" })
-</div>
-
-<div class="form-group">
-    @Html.Label("Danh mục", new { @class = "control-label" })
-    @Html.DropDownList("CategoryID", null, "-- Chọn danh mục --", new { @class = "form-control" })
-</div>
-
-<div class="form-group">
-    @Html.Label("Ảnh sản phẩm", new { @class = "control-label" })
-    <input type="file" name="ImageFile" class="form-control" />
-</div>
-
-<br />
-
-<div class="form-group">
-    <button type="submit" class="btn btn-success">Lưu</button>
-    <a href="@Url.Action("Index", "Products")" class="btn btn-secondary">Hủy</a>
-</div>
+@{
+    ViewBag.Title = "Thêm Sản Phẩm Mới";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
+
+<div class="container mt-4">
+
+    <h3 class="fw-bold mb-4">➕ Thêm Sản Phẩm Mới</h3>
+
+    @using (Html.BeginForm("Create", "Products", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="row">
+
+            <!-- LEFT FORM -->
+            <div class="col-md-6">
+
+                <div class="mb-3">
+                    <label class="form-label">Tên sản phẩm</label>
+                    @Html.TextBoxFor(m => m.ProductName, new { @class = "form-control", placeholder = "Nhập tên sản phẩm" })
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Mô tả</label>
+                    @Html.TextAreaFor(m => m.ProductDescription, new { @class = "form-control", rows = 4, placeholder = "Nhập mô tả..." })
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Giá</label>
+                    @Html.TextBoxFor(m => m.ProductPrice, new { @class = "form-control", type = "number", min = 0 })
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Số lượng</label>
+                    @Html.TextBoxFor(m => m.Quantity, new { @class = "form-control", type = "number", min = 1 })
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Danh Mục</label>
+                    @Html.DropDownList("CategoryID", null, "-- Chọn danh mục --", new { @class = "form-select" })
+                </div>
+
+            </div>
+
+            <!-- RIGHT: IMAGE UPLOAD -->
+            <div class="col-md-6">
+
+                <label class="form-label">Ảnh sản phẩm</label>
+                <input type="file" name="ImageFile" class="form-control mb-3" />
+
+                <div class="border rounded p-3 text-center bg-light">
+                    <p class="text-muted">📷 Xem trước hình ảnh</p>
+                    <img id="previewImg" src="#" style="max-width: 100%; height: auto; display: none;" />
+                </div>
+
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-success mt-4 px-4">💾 Lưu</button>
+        <a href="/Admin/Products" class="btn btn-secondary mt-4">↩ Trở lại</a>
+    }
+
+</div>
+
+<script>
+    // Preview Ảnh
+    document.querySelector("input[name='ImageFile']").addEventListener("change", function () {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            document.getElementById("previewImg").src = e.target.result;
+            document.getElementById("previewImg").style.display = "block";
+        };
+        reader.readAsDataURL(this.files[0]);
+    });
+</script>

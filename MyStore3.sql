@@ -1,0 +1,6 @@
+﻿ALTER TABLE Product
+ADD 
+    Quantity INT NOT NULL DEFAULT 0,
+    Price INT NOT NULL DEFAULT 0,
+    Thumb NVARCHAR(255) NULL,
+    Discount INT NOT NULL DEFAULT 0;
