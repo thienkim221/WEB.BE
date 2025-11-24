@@ -14,7 +14,7 @@ namespace WEB.BE.Areas.Admin.Controllers
     public class CategoriesController : Controller
     {
 
-        private MyStoreEntities3 db = new MyStoreEntities3();
+        private MyStoreEntities db = new MyStoreEntities();
 
         // GET: Admin/Categories
         public async Task<ActionResult> Index()

@@ -1,0 +1,46 @@
+﻿@model WEB.BE.Models.ViewModels.HomeProductVM
+@using PagedList.Mvc;
+
+<h4 class="mt-4 text-primary">DANH SÁCH SẢN PHẨM</h4>
+
+@if (Model.NewProducts != null && Model.NewProducts.Any())
+{
+    <div class="row">
+        @foreach (var item in Model.NewProducts)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    @* Logic hiển thị ảnh *@
+                    @{
+                        string imagePath = item.ProductImage;
+                        if (!imagePath.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+                        {
+                            imagePath = Url.Content("~/Content/Images/" + imagePath);
+                        }
+                    }
+                    <a href="@Url.Action("ProductDetail", "Home", new { id = item.ProductID })">
+                        <img src="@imagePath" class="card-img-top" alt="@item.ProductName" style="height: 200px; object-fit: cover;">
+                    </a>
+                    <div class="card-body">
+                        <h6 class="card-title">@item.ProductName</h6>
+                        <p class="card-text text-danger fw-bold">
+                            @item.ProductPrice.ToString("N0") ₫
+                        </p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="pagination-container text-center mt-4">
+        @Html.PagedListPager(Model.NewProducts, page => Url.Action("Index", "Home", new
+        {
+            page,
+            searchTerm = Model.SearchTerm // Giữ lại trạng thái tìm kiếm
+        })) @* ĐÃ SỬA LỖI: Loại bỏ PagedListRenderOptions.Bootstrap4 *@
+    </div>
+}
+else
+{
+    <p class="text-muted">Không tìm thấy sản phẩm phù hợp.</p>
+}

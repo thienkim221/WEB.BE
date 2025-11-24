@@ -1,0 +1,149 @@
+﻿@model WEB.BE.Models.ViewModels.Cart
+@{
+    ViewBag.Title = "GIỎ HÀNG";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .shoppingcart {
+        background-color: ghostwhite;
+        padding: 20px;
+    }
+
+    .cart-section {
+        background-color: White;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+
+    .cart-img {
+        max-height: 80px;
+        max-width: 80px;
+    }
+
+    .total-summary {
+        font-size: large;
+        color: red;
+        font-weight: bold;
+    }
+</style>
+
+@* JavaScript để cập nhật số lượng (dùng POST) *@
+<script language="javascript">
+    function cartUpdateQuantity(id, newQuantity) {
+        if (newQuantity < 1) return; // Không cho số lượng nhỏ hơn 1
+
+        const form = document.createElement('form');
+        form.method = 'post';
+        form.action = '@Url.Action("UpdateQuantity", "Cart")';
+
+        const idInput = document.createElement('input');
+        idInput.type = 'hidden';
+        idInput.name = 'id';
+        idInput.value = id;
+        form.appendChild(idInput);
+
+        const quantityInput = document.createElement('input');
+        quantityInput.type = 'hidden';
+        quantityInput.name = 'quantity';
+        quantityInput.value = newQuantity;
+        form.appendChild(quantityInput);
+
+        document.body.appendChild(form);
+        form.submit();
+    }
+</script>
+
+<div class="container shoppingcart mt-5">
+    <h2>GIỎ HÀNG</h2>
+    <hr />
+
+    @if (Model == null || !Model.Items.Any())
+    {
+        <p>Bạn chưa có sản phẩm nào trong giỏ. @Html.ActionLink("Tiếp tục mua hàng", "Index", "Home")</p>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-md-9 cart-section">
+
+                @* Phần chi tiết giỏ hàng *@
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th colspan="2">Sản phẩm</th>
+                            <th>Số lượng</th>
+                            <th>Đơn giá</th>
+                            <th>Thành tiền</th>
+                            <th>
+                                @* Nút xóa tất cả *@
+                                @Html.ActionLink("Xóa tất cả mặt hàng trong giỏ", "ClearCart", "Cart", null, null)
+                                <img src="~/Images/remove.png" style="max-height:20px;" alt="Xóa" />
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Items)
+                        {
+                            <tr>
+                                <td><img src="@item.ProductImage" alt="@item.ProductName" class="cart-img" /></td>
+                                <td>@item.ProductName</td>
+                                <td>
+                                    @* Nút giảm số lượng *@
+                                    <button type="button" class="btn btn-sm btn-light"
+                                            onclick="cartUpdateQuantity(@item.ProductID, @item.Quantity - 1)">
+                                        -
+                                    </button>
+
+                                    @* Ô nhập số lượng *@
+                                    <input type="number"
+                                           name="quantity-@item.ProductID"
+                                           value="@item.Quantity"
+                                           min="1" max="100"
+                                           style="width: 50px; text-align: center;"
+                                           readonly />
+
+                                    @* Nút tăng số lượng *@
+                                    <button type="button" class="btn btn-sm btn-light"
+                                            onclick="cartUpdateQuantity(@item.ProductID, @item.Quantity + 1)">
+                                        +
+                                    </button>
+                                </td>
+                                <td>@item.UnitPrice.ToString("N0") ₫</td>
+                                <td>@item.TotalPrice.ToString("N0") ₫</td>
+                                <td>
+                                    @* Nút xóa từng sản phẩm *@
+                                    @Html.ActionLink("Xóa", "RemoveItem", "Cart", new { id = item.ProductID }, null)
+                                    <img src="~/Images/remove.png" style="max-height:20px;" alt="Xóa" />
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                @* Nút Tiếp tục mua hàng *@
+                @Html.ActionLink("Tiếp tục mua hàng", "Index", "Home", null, new { @class = "btn btn-warning mt-3" })
+            </div>
+
+            @* Phần Tính tiền và Thanh toán (Checkout) *@
+            <div class="col-md-3">
+                <div class="cart-section">
+                    <h4>Tổng cộng</h4>
+                    <hr />
+                    <p>Tạm tính: <span class="total-summary">@Model.TotalValue().ToString("N0") ₫</span></p>
+
+                    @* Nút Mua hàng (Chuyển sang Checkout) *@
+                    @Html.ActionLink("Mua hàng", "Checkout", "Order", null, new { @class = "btn btn-danger btn-block" })
+                </div>
+            </div>
+        </div>
+
+        @* Hiển thị Sản phẩm tương tự (Partial View) *@
+        <div class="mt-4">
+            @Html.Partial("_PVSimilarProduct", Model)
+        </div>
+    }
+</div>
+

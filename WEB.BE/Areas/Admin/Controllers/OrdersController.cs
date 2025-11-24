@@ -6,7 +6,7 @@ namespace WEB.BE.Areas.Admin.Controllers
 {
     public class OrdersController : Controller
     {
-        private MyStoreEntities3 db = new MyStoreEntities3();
+        private MyStoreEntities db = new MyStoreEntities();
 
         // GET: Admin/Orders
         public ActionResult Index()

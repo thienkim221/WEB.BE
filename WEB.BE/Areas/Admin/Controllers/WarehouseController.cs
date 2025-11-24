@@ -9,7 +9,7 @@ namespace WEB.BE.Areas.Admin.Controllers
 {
     public class WarehouseController : Controller
     {
-        private MyStoreEntities3 db = new MyStoreEntities3();
+        private MyStoreEntities db = new MyStoreEntities();
         // GET: Admin/Warehouse
         public ActionResult Index()
         {

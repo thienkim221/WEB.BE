@@ -16,7 +16,7 @@ namespace WEB.BE.Areas.Admin.Controllers
 {
     public class ProductsController : Controller
     {
-        private MyStoreEntities3 db = new MyStoreEntities3();
+        private MyStoreEntities db = new MyStoreEntities();
 
         // GET: Admin/Products
         public ActionResult Index(string searchTerm, decimal? minPrice,
@@ -29,7 +29,7 @@ namespace WEB.BE.Areas.Admin.Controllers
             {
                 products = products.Where(p =>
                     p.ProductName.Contains(searchTerm) ||
-                    p.ProductDecription.Contains(searchTerm) ||
+                    p.ProductDescription.Contains(searchTerm) ||
                     p.Category.CategoryName.Contains(searchTerm));
             }
             // Tìm kiếm sản phẩm dựa trên gia tối thiểu
@@ -97,6 +97,7 @@ namespace WEB.BE.Areas.Admin.Controllers
             return View();
         }
 
+
         // POST: Admin/Products/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
@@ -104,26 +105,18 @@ namespace WEB.BE.Areas.Admin.Controllers
         // POST: Admin/Products/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(Product product, HttpPostedFileBase ImageFile)
+        public ActionResult Create([Bind(Include = "ProductID,ProductName,ProductPrice,CategoryID,ProductDescription")] Product product)
         {
             if (ModelState.IsValid)
             {
-                if (ImageFile != null && ImageFile.ContentLength > 0)
-                {
-                    string fileName = Path.GetFileName(ImageFile.FileName);
-                    string path = Path.Combine(Server.MapPath("~/Images/Products"), fileName);
-                    ImageFile.SaveAs(path);
-                    product.ProductImage = fileName;
-                }
-
                 db.Products.Add(product);
-                await db.SaveChangesAsync();
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
             ViewBag.CategoryID = new SelectList(db.Categories, "CategoryID", "CategoryName", product.CategoryID);
             return View(product);
         }
+
 
 
 

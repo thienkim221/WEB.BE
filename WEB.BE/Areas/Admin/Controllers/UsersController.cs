@@ -10,12 +10,12 @@ namespace WEB.BE.Areas.Admin.Controllers
 {
     public class UsersController : Controller
     {
-        private MyStoreEntities3 db = new MyStoreEntities3();
+        private MyStoreEntities db = new MyStoreEntities();
 
         // INDEX
         public ActionResult Index()
         {
-            var admins = db.Users.Where(u => u.Role == "Admin").ToList();
+            var admins = db.Users.Where(u => u.UserRole == "Admin").ToList();
             return View(admins);
         }
 
@@ -31,7 +31,7 @@ namespace WEB.BE.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                user.Role = "Admin";
+                user.UserRole = "Admin";
                 db.Users.Add(user);
                 db.SaveChanges();
                 return RedirectToAction("Index");

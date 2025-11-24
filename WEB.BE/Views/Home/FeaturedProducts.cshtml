@@ -1,0 +1,29 @@
+﻿@model List<WEB.BE.Models.Product>
+
+<h3 class="text-center text-success mb-4">🌟 SẢN PHẨM NỔI BẬT</h3>
+<div class="row justify-content-center mb-5">
+    @if (Model != null)
+    {
+        foreach (var item in Model)
+        {
+            string imgSrc = !string.IsNullOrEmpty(item.ProductImage)
+                ? (item.ProductImage.StartsWith("http") ? item.ProductImage : Url.Content("~/Content/images/" + item.ProductImage))
+                : Url.Content("~/Content/images/no-image.png");
+
+            <div class="col-md-3 col-sm-6 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <img src="@imgSrc" class="card-img-top" style="height:200px; object-fit:cover;" />
+                    <div class="card-body text-center">
+                        <h5>@item.ProductName</h5>
+                        <p class="text-danger fw-bold">@item.ProductPrice.ToString("N0") ₫</p>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <p class="text-center text-secondary">Đang tải sản phẩm nổi bật...</p>
+    }
+</div>
+
